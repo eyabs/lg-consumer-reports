@@ -1,0 +1,286 @@
+---
+title: "Consumer Reports Survey on LG TV Satisfaction"
+author: "Eric Yablunosky"
+date: "October 16th, 2020"
+output: 
+    ioslides_presentation:
+        widescreen: true
+        smaller: true
+        css: tables.css
+---
+
+```{r setup, echo=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(knitr)
+opts_chunk$set(tidy.opts=list(width.cutoff=50), tidy=TRUE)
+options(knitr.table.format = "simple")
+```
+```{r,include=FALSE}
+par(mar=c(5,5,0,0))
+``` 
+
+```{r results='hide', message=FALSE, warning=FALSE, include=FALSE}
+## Required packages.
+source('./CR_test.R')
+theme_set(theme_minimal())
+```
+```{r results='hide', message=FALSE, warning=FALSE, include=FALSE}
+# helper_functions
+lg_red <- '#A50034'
+lg_grey <- '#6B6B6B'
+generate_colors <- function(f){
+    colors <- (f$Brandname == "LG") %>% if_else('#A50034', '#6B6B6B')
+    return(colors)
+}
+```
+## Overview
+
+LG is well positioned in the TV market. LG was the 2nd most popular brand among respondents with a 17.6% market share, with an increasing popularity trend. LG TVs have the 3rd highest rate of customers reporting a 'Perfect' experience with their TV, the 3rd highest rate of customers who are 'Extremely Likely' or 'Somewhat Likely' to recommend their TV, the 3rd best ranking reliability, and LG TVs rank 1st in overall customer satisfaction.
+
+## Brand Comparisons
+
+***
+
+### Brand Popularity
+```{r, echo=FALSE}
+colors <- generate_colors(brands.counts)
+plt <- brands.counts %>% ggplot(aes(Brandname %>% reorder(Rank), Count, fill=colors)) + 
+    geom_bar(stat='identity', show.legend = FALSE) + 
+    xlab('Brand') + 
+    scale_fill_manual(values = colors) +
+    guides(x=guide_axis(angle=45))
+plt
+```
+ 
+LG has the 2nd highest popularity.
+ 
+***
+ 
+### Problem Rate by Brand
+```{r echo=FALSE}
+color.lg <- generate_colors(prob.rates)
+plt <- prob.rates %>% ggplot(aes(Brandname %>% reorder(Rank), AnyProblemRate)) + 
+    geom_bar(stat='identity', show.legend = FALSE, fill=color.lg) + 
+    labs(x = 'Brand', y='Problem Rate') + 
+    scale_y_continuous(labels=scales::percent) +
+    guides(x=guide_axis(angle=45))
+plt
+```
+
+LG TVs have the 3rd lowest problem rate.
+
+***
+
+### Recommendation Rate
+```{r echo=FALSE}
+color.lg <- generate_colors(reccomend.rates)
+plt <- reccomend.rates %>% ggplot(aes(Brandname %>% reorder(Rank), ReccomendRate)) + 
+    geom_bar(stat='identity', show.legend = FALSE, fill=color.lg) + 
+    labs(x = 'Brand', y='Reccomendation Rate') + 
+    scale_y_continuous(labels=scales::percent) +
+    guides(x=guide_axis(angle=45))
+plt
+```
+
+LG TV consumers are 3rd most likely to be highly likely or somewhat likely to recommend their TV to friends.
+
+***
+
+### Experience Comparison: LG v Samsung v All
+
+```{r echo=FALSE}
+plt <- exp.rates.comp %>% 
+    mutate(LG = pct, SAMSUNG = pct.sam, ALL = pct.all) %>% 
+    select(Tv.Experience.Label, LG, SAMSUNG, ALL) %>% 
+    gather('Brandname', 'pct', -Tv.Experience.Label) %>% 
+    ggplot(aes(Brandname, pct, color=Tv.Experience.Label)) +
+    geom_point() +
+    labs(x = 'Brandname', y='Percent of Responses') + 
+    scale_y_continuous(labels=scales::percent) +
+    scale_x_discrete() +
+    guides(x=guide_axis(angle=45), color=guide_legend(title="Product Experience"))
+plt
+```
+
+LG TVs are slightly higher in product experience when compared to Samsung and the market as a whole.
+
+***
+
+### Reccomendation Liklihood Comparison: LG v Samsung v All
+```{r echo=FALSE}
+plt <- rec.rates.comp %>% 
+    mutate(LG = pct, SAMSUNG = pct.sam, ALL = pct.all) %>% 
+    select(Tv.Recommend.Label, LG, SAMSUNG, ALL) %>% 
+    gather('Brandname', 'pct', -Tv.Recommend.Label) %>% 
+    ggplot(aes(Brandname, pct, color=Tv.Recommend.Label)) +
+    geom_point() +
+    labs(x = 'Brandname', y='Percent of Responses') + 
+    scale_y_continuous(labels=scales::percent) +
+    scale_x_discrete() +
+    guides(x=guide_axis(angle=45), color=guide_legend(title="Liklihood to Recommend"))
+plt
+```
+
+LG ranks higher than the whole market in likelihood of customers to recommend their TVs but is trailing Samsung.
+
+***
+
+### Reliability Comparison: LG v Samsung v All
+
+```{r echo=FALSE}
+plt <- rel.rates.comp %>% 
+    mutate(LG = pct, SAMSUNG = pct.sam, ALL = pct.all) %>% 
+    select(Tv.Reliable.Label, LG, SAMSUNG, ALL) %>% 
+    gather('Brandname', 'pct', -Tv.Reliable.Label) %>% 
+    ggplot(aes(Brandname, pct, color=Tv.Reliable.Label)) +
+    geom_point() +
+    labs(x = 'Brandname', y='Percent of Responses') + 
+    scale_y_continuous(labels=scales::percent) +
+    scale_x_discrete() +
+    guides(x=guide_axis(angle=45), color=guide_legend(title="Reliability rating"))
+plt
+```
+
+LG TVs are rated slightly higher in reliability when compared to Samsung and the market as a whole.
+
+***
+
+### Problem Incidence Rankings {.smaller}
+
+```{r echo=FALSE}
+problems.rank.T %>% kable()
+```
+
+Overall, LG ranks 3rd in terms of lowest incidence of problems. However, this topic suggests areas of improvement.
+
+LG TVs appear to have a high incidence rate for issues regarding Burn in (ranks last), HDMI Inputs, and discoloration, and does not rank in the top three for issues regarding intermittent picture loss, WIFI connectivity, and smart apps freezing. LG ranks second best for issues regarding failure to power on, intermittent sound loss, and randomly turning off, and third best for issues where sound is lost.
+
+***
+
+### Feature Satisfaction Rankings
+```{r echo=FALSE}
+
+satisfaction.rank.T %>% kable()
+
+```
+
+LG ranks highest overall in terms of feature satisfaction. In every subcategory, LG ranks either 1st or 2nd. 
+
+## Trends
+
+***
+
+### Year Purchased Trend
+ 
+```{r echo=FALSE}
+ plt <- lg.year.trends %>% filter(Year.Purchased < 2019) %>% 
+    ggplot(aes(Year.Purchased, Count)) +
+    geom_line(color=lg_red) +
+    labs(y='Review Count', x='Year Purchased')
+plt
+```
+ 
+ There is a solid upward trend over time.
+ 
+***
+
+### Reccomendation Trends by Year Purchased
+
+```{r echo=FALSE}
+
+plt <- lg.recc.year.trends %>% ggplot(aes(Year.Purchased, pct, color=Tv.Recommend.Label)) +
+    geom_point() +
+    labs(x = 'Brand', y='Percent of Responses') + 
+    scale_y_continuous(labels=scales::percent) +
+    scale_x_continuous(breaks = 2011:2019) +
+    guides(x=guide_axis(angle=45), color=guide_legend(title="Liklihood to Reccomend"))
+plt
+
+```
+
+Respondents answering 'Extremely likely' have gone up over time.
+
+***
+
+### Reccomendation Trends by TV Type
+
+```{r echo=FALSE}
+
+plt <- lg.tv.type.recc %>% ggplot(aes(Tv.Type.Label, pct, color=Tv.Recommend.Label)) +
+    geom_point() +
+    labs(x = 'TV Type', y='Percent of Responses') + 
+    scale_y_continuous(labels=scales::percent) +
+    scale_x_discrete() +
+    guides(x=guide_axis(angle=45), color=guide_legend(title="Liklihood to Reccomend"))
+plt
+
+```
+
+LG consumers are much more likely to rate OLED TVs as 'Extremely likely' to recommend.
+
+***
+
+### Reliability Trends by TV Type
+
+```{r echo=FALSE}
+
+plt <- lg.tv.type.reliable %>% ggplot(aes(Tv.Type.Label, pct, color=Tv.Reliable.Label)) +
+    geom_point() +
+    labs(x = 'TV Type', y='Percent of Responses') + 
+    scale_y_continuous(labels=scales::percent) +
+    scale_x_discrete() +
+    guides(x=guide_axis(angle=45), color=guide_legend(title="Reliability"))
+plt
+
+```
+
+Reliability is similar across LCD/LED and OLED TVs.
+
+## Improvement
+
+***
+### What makes a customer report a TV as likely to recommend? {.smaller}
+
+I build a logistic regression model to predict whether a consumer will report a TV as likely to recommend. The factors used to make this prediction are the satisfaction ratings and technical problems found in the dataset. 
+
+***    
+
+Ranked from highest effect to lowest effect, the following satisfaction ratings and technical problems were found to be significant, along with whether they had a positive (+) or negative (-) effect on likelihood to recommend the TV.
+
+1. Brand reputation (+)
+2. Discoloration (-)
+3. Burned in graphics (-)
+4. Failure to power on (-)
+5. Lost sound (-)
+6. HDMI input issues (-)
+7. Intermittent picture loss (-)
+8. Freezing smart apps (-)
+9. Screen size satisfaction (-)
+10. Intermittent sound loss (-)
+11. Wifi connection issues (-)
+12. Picture quality satisfaction (+)
+13. Randomly powering off (-)
+14. Menu navigation satisfaction (+)
+
+***
+
+### Takeaways:
+
+* Evidently, Brand reputation is the most important factor in consumers' perception of quality. This is good news for LG, as they rank 1st in Brand reputation.
+* Discoloration, Burned in graphics, and HDMI input issues are areas that LG performs poorly on and all play a large role in reducing consumers' perception of a TV.
+
+## Conclusion {.smaller}
+
+* LG customers are very satisfied with their TVs. 
+* LG TVs are the second most popular brand of TV.
+* LG TVs have the highest brand reputation among studied brands.
+* LG TVs perform well on technical issue incidences overall, however there is room for improvement.
+* The biggest and most important technical issues that affect LG TVs are:
+    * Burned in graphics
+    * HDMI input issues
+    * Discoloration
+* LG should also look to improve these issues:
+    * Smart apps freezing
+    * WIFI connectivity issues
+    * Intermittent picture loss
+* LG should strive to maintain their high brand reputation.
