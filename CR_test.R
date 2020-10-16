@@ -76,60 +76,12 @@ ctypes <- cols(
     Years.Owned = col_integer()
 )
 
-data <- read_csv('./tv_test.csv',
+data <- read_csv('./data/tv_test.csv',
                  col_names = names(ctypes$cols),
                  col_types = ctypes,
                  skip=1
             )
 
-#
-# problem_cols <- c(TV.PROBLEMS.10.SlowInternet,
-#                   TV.PROBLEMS.11.SlowFunction,
-#                   TV.PROBLEMS.12.SmartTVapps,
-#                   TV.PROBLEMS.13.Soundproblems,
-#                   TV.PROBLEMS.14.NoPowerOn,
-#                   TV.PROBLEMS.15.TvTurnsOff,
-#                   TV.PROBLEMS.16.OtherProb,
-#                   TV.PROBLEMS.16.OtherProb.Writein,
-#                   TV.PROBLEMS.17.NoProblems,
-#                   TV.PROBLEMS.18.Dontrecall,
-#                   TV.PROBLEMS.18.FailedPowerOn,
-#                   TV.PROBLEMS.19.LosesPictureIntermit,
-#                   TV.PROBLEMS.1.CableConnection,
-#                   TV.PROBLEMS.20.LostPicture,
-#                   TV.PROBLEMS.21.LosesSoundIntermit,
-#                   TV.PROBLEMS.22.LostSound,
-#                   TV.PROBLEMS.23.DeadPixels,
-#                   TV.PROBLEMS.24.Discoloration,
-#                   TV.PROBLEMS.25.HDMIInputs,
-#                   TV.PROBLEMS.26.RemoteControl,
-#                   TV.PROBLEMS.27.SmartAppsFroze,
-#                   TV.PROBLEMS.28.TurnedOff,
-#                   TV.PROBLEMS.29.BurnedGraphic,
-#                   TV.PROBLEMS.2.DeadPixels,
-#                   TV.PROBLEMS.30.WifiConnection,
-#                   TV.PROBLEMS.3.PictureQuality,
-#                   TV.PROBLEMS.4.Internet,
-#                   TV.PROBLEMS.5.HDMIinput,
-#                   TV.PROBLEMS.6.LostPicture,
-#                   TV.PROBLEMS.7.3Dproblems,
-#                   TV.PROBLEMS.8.RemoteControl)
-
-# sat_cols <- c(TV.SATRATE.10.SelectionVideoStreaming.LABEL,
-#               TV.SATRATE.11.AccessPhotos.LABEL,
-#               TV.SATRATE.12.HDMIInputs.LABEL,
-#               TV.SATRATE.13.USBPorts.LABEL,
-#               TV.SATRATE.14.VideoGame.LABEL,
-#               TV.SATRATE.15.CompatabilityAssistant.LABEL,
-#               TV.SATRATE.1.BrandReputation.LABEL,
-#               TV.SATRATE.2.Appearance.LABEL,
-#               TV.SATRATE.3.PictureQuality.LABEL,
-#               TV.SATRATE.4.Sound.Quality.LABEL,
-#               TV.SATRATE.5.AccessUSB.LABEL,
-#               TV.SATRATE.6.ConnectingInternet.LABEL,
-#               TV.SATRATE.7.MenuNavigation.LABEL,
-#               TV.SATRATE.8.ScreenSize.LABEL,
-#               TV.SATRATE.9.SelectionMusicStreaming.LABEL)
 
 data <- data %>%
     mutate_at(vars(starts_with("TV.PROBLEM")), list( ~if_else( is.na(.), FALSE, . )))

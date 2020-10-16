@@ -35,5 +35,4 @@ vignettes/*.pdf
 *.utf8.md
 *.knit.md
 
-TV Test (1).xlsx
-tv test.csv
+data/*
